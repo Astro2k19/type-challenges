@@ -22,7 +22,57 @@
 
 /* _____________ Your Code Here _____________ */
 
-type MyAwaited<T> = any
+
+// type FakeReturnType<T> = T extends (...args: any[]) => infer R ? R : never
+// type FakeReturnType2<T> = T extends (
+//         ...args: any[]
+//     ) => infer R ?
+//     R extends string ?
+//         `${R}_test` : never
+//     : never
+//
+// type FakeReturnType3<T> = T extends ((...args: any[]) => infer R extends string) ? R : never
+//
+// type GetTypeFromDeepObj<T> = T extends {
+//   a: {
+//     b: {
+//       c: infer C
+//     }
+//   }
+// } | {
+//   a: infer C
+// } | {
+//   a: {
+//     b: infer C extends number
+//   }
+// } ? C : never
+//
+// const obj = {
+//   a: {
+//     b: 9
+//   }
+// }
+//
+// type ObjType = GetTypeFromDeepObj<typeof obj>
+//
+// const objvar: ObjType = 3
+//
+//
+// const a = () => 'true'
+// const number = 1
+//
+// type test = FakeReturnType3<typeof a>
+// type test2 = FakeReturnType<typeof number>
+//
+// const b: test = '1'
+
+
+type MyAwaited<T extends PromiseLike<any | PromiseLike<any>>> =
+    T extends PromiseLike<infer U>
+        ? U extends PromiseLike<any>
+            ? MyAwaited<U>
+            : U
+        : never
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
