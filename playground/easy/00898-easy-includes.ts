@@ -18,7 +18,20 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Includes<T extends readonly any[], U> = any
+// type Includes<T extends readonly unknown[], U> =
+//     T extends [infer Head, ...infer Tail]
+//     ? Equal<Head, U> extends true
+//         ? true
+//         : Includes<Tail, U>
+//     : false
+//
+// type Includes2<T extends readonly unknown[], U> = {
+//   [P in keyof T]: Equal<T[P], U>
+// } extends Record<number, true> ? true : false
+
+type Includes<T extends readonly unknown[], U> = {
+  [P in keyof T]: Equal<T[P], U>
+}[number] extends false ? false : true
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
