@@ -27,10 +27,11 @@
 
   > View on GitHub: https://tsch.js.org/3
 */
-
+// https://www.typescriptlang.org/docs/handbook/2/mapped-types.html#key-remapping-via-as
 /* _____________ Your Code Here _____________ */
-
-type MyOmit<T, K> = any
+type MyOmit<T, K extends keyof T> = {
+  [P in keyof T as P extends K ? never : P]: T[P]
+}
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'

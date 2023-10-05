@@ -33,6 +33,12 @@ type Includes<T extends readonly unknown[], U> = {
   [P in keyof T]: Equal<T[P], U>
 }[number] extends false ? false : true
 
+type a = {
+  [p: number]: string | number
+}
+
+type test =  a[number]
+
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 
