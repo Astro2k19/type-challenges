@@ -36,8 +36,11 @@
 
 /* _____________ Your Code Here _____________ */
 
-type DeepReadonly<T> = any
+// type DeepReadonly<T> = {
+//   readonly [key in keyof T]: keyof T[key] extends object ? T[key] : DeepReadonly<T[key]>
+// }
 
+type DeepReadonly<T> = T extends Function ? T : {readonly [P in keyof T]: DeepReadonly<T[P]>}
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 
@@ -45,6 +48,9 @@ type cases = [
   Expect<Equal<DeepReadonly<X1>, Expected1>>,
   Expect<Equal<DeepReadonly<X2>, Expected2>>,
 ]
+
+type test1 = DeepReadonly<X1>
+
 
 type X1 = {
   a: () => 22
@@ -68,6 +74,16 @@ type X1 = {
     }
   }
 }
+
+type Test = DeepReadonly<X1>
+
+// type new1 = Test['b']
+
+declare const z: Test;
+if ("a" in z) {
+  z.a = ""
+}
+
 
 type X2 = { a: string } | { b: number }
 
@@ -93,6 +109,24 @@ type Expected1 = {
     }
   }
 }
+
+type Hmm<T> = keyof T extends never ? true : false
+
+type x1 = Hmm<{a : 1}>
+type x2 = Hmm<{}>
+type x3 = Hmm<number>
+type x4 = Hmm<object>
+type x5 = Hmm<{a: 1} | {b: 1}>
+
+type Look<T> = { [K in keyof T]: 123 };
+type Y1 = Look<{ a: string }> // {a: 123}
+type Y2 = Look<string> // string
+type Y3 = Look<{ a: string } | { b: string }>
+//  Look<{ a: string; }> | Look<{ b: string; }>
+
+
+
+type test2 = keyof object
 
 type Expected2 = { readonly a: string } | { readonly b: number }
 
