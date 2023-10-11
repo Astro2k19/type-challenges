@@ -36,11 +36,11 @@
 
 /* _____________ Your Code Here _____________ */
 
-// type DeepReadonly<T> = {
-//   readonly [key in keyof T]: keyof T[key] extends object ? T[key] : DeepReadonly<T[key]>
-// }
+type DeepReadonly<T> = {
+  readonly [key in keyof T]: keyof T[key] extends never ? T[key] : DeepReadonly<T[key]>
+}
 
-type DeepReadonly<T> = T extends Function ? T : {readonly [P in keyof T]: DeepReadonly<T[P]>}
+// type DeepReadonly<T> = T extends Function ? T : {readonly [P in keyof T]: DeepReadonly<T[P]>}
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 
@@ -76,14 +76,6 @@ type X1 = {
 }
 
 type Test = DeepReadonly<X1>
-
-// type new1 = Test['b']
-
-declare const z: Test;
-if ("a" in z) {
-  z.a = ""
-}
-
 
 type X2 = { a: string } | { b: number }
 
