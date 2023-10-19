@@ -23,7 +23,33 @@
 
 /* _____________ Your Code Here _____________ */
 
-declare function PromiseAll(values: any): any
+// declare function PromiseAll(
+//     values: ReadonlyArray<any>
+// ): typeof values extends [infer First, ...infer Rest]
+//     ? First extends PromiseLike<infer Params>
+//         ? typeof PromiseAll(Rest)
+
+type Awaited<T> = T extends PromiseLike<infer K> ? Awaited<K> : T
+
+declare function PromiseAll<T extends unknown[]>
+(values: readonly [...T]): Promise<{
+  [P in keyof T] : Awaited<T[P]>
+}>
+
+const a = ['hello', 'world']
+
+declare function ft1<T extends unknown[]>(t: T): T;
+declare function ft2<T extends unknown[]>(t: T): readonly [...T];
+declare function ft3<T extends unknown[]>(t: [...T]): T;
+declare function ft4<T extends unknown[]>(t: [...T]): readonly [...T];
+
+ft1(['hello', 42, 45, 45, 45]);  // (string | number)[]
+ft2(['hello', 42, 78, 45 ,45]);  // readonly (string | number)[]
+ft3(['hello', 42, 45]);  // [string, number]
+ft4(['hello', 42]);  // readonly [string, number]
+
+
+type test = typeof a[0]
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'

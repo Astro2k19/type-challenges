@@ -29,7 +29,12 @@
 
 /* _____________ Your Code Here _____________ */
 
-type LookUp<U, T> = any
+type LookUp<U, T> =
+    U extends { type: string }
+        ? U['type'] extends T
+            ? U
+        : never
+    : never
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -38,6 +43,9 @@ interface Cat {
   type: 'cat'
   breeds: 'Abyssinian' | 'Shorthair' | 'Curl' | 'Bengal'
 }
+
+type b = 'dog' | 'cat' extends 'dog' ? true : false
+// type LookUp<U extends {type: any}, T> = U['type'] extends T ? U : never
 
 interface Dog {
   type: 'dog'
@@ -51,6 +59,8 @@ type cases = [
   Expect<Equal<LookUp<Animal, 'dog'>, Dog>>,
   Expect<Equal<LookUp<Animal, 'cat'>, Cat>>,
 ]
+
+type test = LookUp<Animal, 'dog'>
 
 /* _____________ Further Steps _____________ */
 /*
