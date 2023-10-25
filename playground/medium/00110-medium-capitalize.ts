@@ -18,13 +18,15 @@
 
 /* _____________ Your Code Here _____________ */
 
-// type MyCapitalize<S extends string> = S[0] extends alphabet[S[0]]
-//
-    type a = 'test'
+type MyCapitalize<S extends string> =
+    S extends `${infer First}${infer Rest}`
+        ? First extends keyof alphabet
+            ? `${alphabet[First]}${Rest}`
+            : S
+        : S
 
-type b = a[0]
 
-const test: b = 'asdfasdf'
+type Test = MyCapitalize<'abc'>
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
