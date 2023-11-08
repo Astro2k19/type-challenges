@@ -16,7 +16,12 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Permutation<T> = any
+type Permutation<T, K = T> =
+    [T] extends [never]
+        ? []
+        : K extends K ?
+        [K, ...Permutation<Exclude<T, K>>]
+        : never
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -28,6 +33,10 @@ type cases = [
   Expect<Equal<Permutation<boolean>, [false, true] | [true, false]>>,
   Expect<Equal<Permutation<never>, []>>,
 ]
+
+function assertNever<T>(value: [T] extends [never] ? true : false) {}
+assertNever<never>(true)
+assertNever<string>(false)
 
 /* _____________ Further Steps _____________ */
 /*
