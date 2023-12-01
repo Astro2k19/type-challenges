@@ -27,10 +27,37 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Merge<F, S> = any
+// type Merge<F extends keyof any, S extends keyof any> = {
+//   [K in keyof F | S]: K extends keyof F
+//       ? K extends keyof S
+//           ? S[K]
+//           : F[K]
+//       : S[K]
+// }
+
+type Merge<F,S> = {
+  [K in keyof F | keyof S]: K extends keyof F
+      ? K extends keyof S
+          ? S[K]
+          : F[K]
+      : K extends keyof S
+          ? S[K]
+      : never
+}
+
+
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
+
+type test = Prettify<Merge<Foo, Bar>>
+
+
+const a: test = {
+  a: 1,
+  b:5,
+  c: true
+}
 
 type Foo = {
   a: number
@@ -48,6 +75,10 @@ type cases = [
     c: boolean
   }>>,
 ]
+
+export type Prettify<T> = {
+  [K in keyof T]: T[K];
+} & NonNullable<unknown>;
 
 /* _____________ Further Steps _____________ */
 /*

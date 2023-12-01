@@ -26,7 +26,7 @@ type StrToArr<S extends string> =
             ? [First, ...StrToArr<Rest>]
             : []
 
-type t1 = StrToArr<'hello1'>
+type t1 = StrToArr<'hello1'>[number]
 
 // kumiko
 // k  - first, rest - umiko

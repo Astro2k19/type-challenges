@@ -19,7 +19,10 @@
 
 /* _____________ Your Code Here _____________ */
 
-type StringToUnion<T extends string> = any
+type StringToUnion<S extends string, T extends string[] = []> =
+    S extends `${infer First}${infer Rest}`
+        ? StringToUnion<Rest, [...T, First]>
+        : T[number]
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'

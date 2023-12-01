@@ -20,18 +20,14 @@
 
 type MyCapitalize<S extends string> =
     S extends `${infer First}${infer Rest}`
-        ? First extends keyof alphabet
-            ? `${alphabet[First]}${Rest}`
+        ? First extends keyof Alphabet
+            ? `${Alphabet[First]}${Rest}`
             : S
         : S
-
-
-type Test = MyCapitalize<'abc'>
-
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
 
-type alphabet = {
+type Alphabet = {
   'a': 'A',
   'b': 'B',
   'c': 'C',

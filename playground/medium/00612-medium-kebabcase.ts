@@ -23,22 +23,62 @@
 */
 
 /* _____________ Your Code Here _____________ */
+type Alphabet = {
+    'A': 'a',
+    'B': 'b',
+    'C': 'c',
+    'D': 'd',
+    'E': 'e',
+    'F': 'f',
+    'G': 'g',
+    'H': 'h',
+    'I': 'i',
+    'J': 'j',
+    'K': 'k',
+    'L': 'l',
+    'M': 'm',
+    'N': 'n',
+    'O': 'o',
+    'P': 'p',
+    'Q': 'q',
+    'R': 'r',
+    'S': 's',
+    'T': 't',
+    'U': 'u',
+    'V': 'v',
+    'W': 'w',
+    'X': 'x',
+    'Y': 'y',
+    'Z': 'z'
+}
 
-type KebabCase<S> = any
+
+type KebabCase<S extends string, IsFirst = true> = S extends ''
+    ? S
+    : S extends `${infer First}${infer Rest}` ?
+        First extends keyof Alphabet
+            ? IsFirst extends true
+                ? `${Alphabet[First]}${KebabCase<Rest, false>}`
+                : `-${Alphabet[First]}${KebabCase<Rest, false>}`
+            : `${First}${KebabCase<Rest, false>}`
+        : never
+
+
+type test = KebabCase<'ABC'>
 
 /* _____________ Test Cases _____________ */
-import type { Equal, Expect } from '@type-challenges/utils'
+import type {Equal, Expect} from '@type-challenges/utils'
 
 type cases = [
-  Expect<Equal<KebabCase<'FooBarBaz'>, 'foo-bar-baz'>>,
-  Expect<Equal<KebabCase<'fooBarBaz'>, 'foo-bar-baz'>>,
-  Expect<Equal<KebabCase<'foo-bar'>, 'foo-bar'>>,
-  Expect<Equal<KebabCase<'foo_bar'>, 'foo_bar'>>,
-  Expect<Equal<KebabCase<'Foo-Bar'>, 'foo--bar'>>,
-  Expect<Equal<KebabCase<'ABC'>, 'a-b-c'>>,
-  Expect<Equal<KebabCase<'-'>, '-'>>,
-  Expect<Equal<KebabCase<''>, ''>>,
-  Expect<Equal<KebabCase<'😎'>, '😎'>>,
+    Expect<Equal<KebabCase<'FooBarBaz'>, 'foo-bar-baz'>>,
+    Expect<Equal<KebabCase<'fooBarBaz'>, 'foo-bar-baz'>>,
+    Expect<Equal<KebabCase<'foo-bar'>, 'foo-bar'>>,
+    Expect<Equal<KebabCase<'foo_bar'>, 'foo_bar'>>,
+    Expect<Equal<KebabCase<'Foo-Bar'>, 'foo--bar'>>,
+    Expect<Equal<KebabCase<'ABC'>, 'a-b-c'>>,
+    Expect<Equal<KebabCase<'-'>, '-'>>,
+    Expect<Equal<KebabCase<''>, ''>>,
+    Expect<Equal<KebabCase<'😎'>, '😎'>>,
 ]
 
 /* _____________ Further Steps _____________ */
