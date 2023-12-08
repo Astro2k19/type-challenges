@@ -12,7 +12,11 @@
 
 /* _____________ Your Code Here _____________ */
 
-type Diff<O, O1> = any
+import {Prettify} from "./00599-medium-merge";
+
+type Diff<O, O1> = {
+  [P in keyof (O & O1) as P extends keyof (O | O1) ? never : P]: (O & O1)[P]
+}
 
 /* _____________ Test Cases _____________ */
 import type { Equal, Expect } from '@type-challenges/utils'
@@ -30,6 +34,8 @@ type Coo = {
   name: string
   gender: number
 }
+
+type test = Diff<Foo, Bar>
 
 type cases = [
   Expect<Equal<Diff<Foo, Bar>, { gender: number }>>,
